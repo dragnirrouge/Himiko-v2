@@ -1,11 +1,30 @@
 import os, json, random, requests
-from flask import Flask
+from flask import Flask, request
 from gtts import gTTS
 from moviepy.editor import ColorClip, AudioFileClip
 
 app = Flask(__name__)
 
-# --- 50 HISTOIRES DE BASE FR ---
+# --- 1. VERIFICATION TIKTOK - NE PAS TOUCHER ---
+@app.route('/tiktokDLlJi4pm5NQE3Twd85kP8cBNjcmKSOF9.txt')
+@app.route('/tiktokDLlJi4pm5NQE3Twd85kP8cBNjcmKSOF9')
+def tiktok_verify():
+    return "tiktok-developers-site-verification=DLlJi4pm5NQE3Twd85kP8cBNjcmKSOF9", 200, {'Content-Type': 'text/plain'}
+
+@app.route('/terms')
+def terms():
+    return "Terms of Service for Himiko V2 - Personal use app for managing my own TikTok content."
+
+@app.route('/privacy')
+def privacy():
+    return "Privacy Policy for Himiko V2 - This app does not collect data from other users. Only for personal account management."
+
+@app.route('/tiktok/callback')
+def tiktok_callback():
+    code = request.args.get('code')
+    return f"TikTok Callback OK - code: {code}. You can now close this window."
+
+# --- 2. TES HISTOIRES ---
 HISTOIRES_BASE = [
     "POV : Tu découvres que ton meilleur ami t'a menti depuis 3 ans et tu trouves la preuve aujourd'hui",
     "L'astuce que les tiktokeurs à 1M d'abonnés ne veulent pas que tu saches pour percer",
@@ -20,8 +39,11 @@ HISTORIQUE_FILE = "historique.json"
 def charger_historique():
     if not os.path.exists(HISTORIQUE_FILE):
         return []
-    with open(HISTORIQUE_FILE, 'r') as f:
-        return json.load(f)
+    try:
+        with open(HISTORIQUE_FILE, 'r') as f:
+            return json.load(f)
+    except:
+        return []
 
 def sauvegarder_historique(h):
     with open(HISTORIQUE_FILE, 'w') as f:
@@ -43,33 +65,26 @@ def creer_video(texte):
 
 @app.route('/')
 def home():
-    return "HIMIKO V2 FR est en ligne - Anti-doublon actif"
+    return "HIMIKO V2 FR est en ligne - Anti-doublon actif + TikTok Verified"
 
 @app.route('/post-now')
 def poster():
     historique = charger_historique()
-    
-    # 1. Choisir une histoire non postée
     dispo = [h for h in HISTOIRES_BASE if h not in historique]
     
-    # Si tout a été posté, on vide après 90 jours (ici on recycle)
     if not dispo:
         dispo = HISTOIRES_BASE
-        historique = [] # reset pour l'exemple, en prod on garde 90 jours
+        historique = []
     
     histoire_choisie = random.choice(dispo)
     histoire_finale = remixeur(histoire_choisie)
     
-    # 2. Créer vidéo
     video_path = creer_video(histoire_finale)
     
-    # 3. Poster sur TikTok via Euler
     EULER_KEY = os.getenv("EULER_API_KEY")
     if EULER_KEY:
-        # Ici ton appel Euler
         print(f"POSTE: {histoire_finale}")
     
-    # 4. Sauvegarder pour ne plus reposter
     historique.append(histoire_choisie)
     sauvegarder_historique(historique)
     
