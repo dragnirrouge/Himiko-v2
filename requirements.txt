@@ -1,4 +1,5 @@
-apscheduler==3.10.4
-pytz
+Flask
+gunicorn
+moviepy==1.0.3
+gTTS
 requests
-flask
