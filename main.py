@@ -1,7 +1,7 @@
 import os, json, random, requests
 from flask import Flask, request
 from gtts import gTTS
-from moviepy.editor import ColorClip, AudioFileClip
+from moviepy import ColorClip, AudioFileClip
 
 app = Flask(__name__)
 
