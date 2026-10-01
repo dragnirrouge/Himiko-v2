@@ -1,38 +1,27 @@
-# HIMIKO V2 - VERSION RENDER - 12 VIDEOS/JOUR GMT+1 BRAZZAVILLE
+from flask import Flask
+import threading
 import os
 import time
-import datetime
-from apscheduler.schedulers.blocking import BlockingScheduler
-import pytz
+from datetime import datetime
 
-# --- CONFIG HIMIKO VERROUILLÉE ---
-TIMEZONE = pytz.timezone("Africa/Brazzaville")
+app = Flask(__name__)
 
-PLATFORMS = {
-    "tiktok_038": "famille_africaine_sorcellerie_pixar_coherent",
-    "tiktok_035": "tendance_virale_moderne",
-    "youtube_blanc": "heritage_africain_film_noir_8min",
-    "youtube_rouge": "k_drama_amour_succession_chaebol_contract"
-}
+@app.route('/')
+def home():
+    return f"HIMIKO V2 ACTIVE - {datetime.now()} - Brazzaville GMT+1 - OK"
 
-ANIMATION_RULES = "seed_locked + same_reference_image + no_brutal_change + transition_fluide"
+def himiko_loop():
+    print("HIMIKO demarree - attente scheduler...")
+    # Importe ton ancien code ici
+    try:
+        # Si tu as un fichier scheduler.py ou bot.py
+        import main_old 
+    except:
+        while True:
+            print(f"[{datetime.now()}] HIMIKO en vie - heartbeat")
+            time.sleep(60)
 
-# Calendrier 12 posts groupés
-SCHEDULE = [
-    ("10:00", "tiktok", "histoire.courte038", "P1 Long"),
-    ("10:15", "tiktok", "histoire.courte35", "P1 Long"),
-    ("10:30", "youtube", "dragnirblanc", "P1 Film 4min"),
-    ("10:45", "youtube", "dragnirrouge", "P1 K-drama 4min"),
-    ("13:00", "youtube_shorts", "dragnirblanc", "Short 1/6"),
-    ("13:10", "youtube_shorts", "dragnirrouge", "Short K-drama 1/6"),
-    ("18:00", "tiktok", "histoire.courte038", "P2 Suite"),
-    ("18:15", "tiktok", "histoire.courte35", "P2 Suite"),
-    ("18:30", "youtube", "dragnirblanc", "P2 Suite Film"),
-    ("18:45", "youtube", "dragnirrouge", "P2 Suite K-drama"),
-    ("20:30", "youtube_shorts", "dragnirblanc", "Short 2/6"),
-    ("20:40", "youtube_shorts", "dragnirrouge", "Short K-drama 2/6"),
-]
-
-def generate_story(account, format_type):
-    # Ici tu brancheras ton générateur d'histoire + API image/video
-    now
+if __name__ == "__main__":
+    threading.Thread(target=himiko_loop, daemon=True).start()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
