@@ -1,0 +1,7 @@
+services:
+    - type: worker
+    name: himiko-v2
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    plan: free
