@@ -3,4 +3,3 @@ gunicorn
 moviepy==1.0.3
 gTTS
 requests
-imageio-ffmpeg
